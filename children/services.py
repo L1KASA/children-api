@@ -17,7 +17,6 @@ class ChildService:
                 'full_name': child.full_name,
                 'cyberons': child.cyberons,
                 'status': child.status,
-                'status_display': child.get_status_display(),
                 'created_at': child.created_at.isoformat(),
                 'updated_at': child.updated_at.isoformat(),
             })
