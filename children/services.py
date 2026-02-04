@@ -3,11 +3,17 @@ from children.models import Child
 
 class ChildService:
     @staticmethod
-    def get_all_children() -> list[dict[str, int | str]]:
+    def get_all_children(status_filter: str = None) -> list[dict[str, int | str]]:
         """
-        Получить всех детей
+        Получить всех детей с возможностью фильтрации по полям
+
+        Args:
+            status_filter: Фильтр по статусу. По умолчанию None.
         """
         children = Child.objects.all()
+
+        if status_filter:
+            children = children.filter(status=status_filter)
 
         result = []
 
@@ -24,6 +30,9 @@ class ChildService:
         return result
 
     @staticmethod
-    def get_children_count() -> int:
-        """Получить количество детей"""
-        return Child.objects.count()
+    def get_children_count(status_filter: str = None) -> int:
+        """Получить количество детей с возможностью фильтрации по полям"""
+        queryset = Child.objects.all()
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+        return queryset.count()

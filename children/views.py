@@ -1,12 +1,23 @@
 from django.http import JsonResponse, HttpRequest
 from django.views import View
+
+from .models import Child
 from .services import ChildService
 
 
 class ChildrenView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
         try:
-            children_data = ChildService.get_all_children()
+            status_filter = request.GET.get('status')
+
+            if status_filter and status_filter not in Child.Status.values:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Некорректный статус.'
+                },
+                status=400,
+            )
+            children_data = ChildService.get_all_children(status_filter=status_filter)
 
             return JsonResponse({
                 'success': True,
