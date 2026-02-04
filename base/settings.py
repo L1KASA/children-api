@@ -127,3 +127,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://45.10.41.33',
+    'https://45.10.41.33',
+]
