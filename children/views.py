@@ -1,7 +1,6 @@
 from django.http import JsonResponse, HttpRequest
 from django.views import View
 
-from .models import Child
 from .services import ChildService
 
 
@@ -9,14 +8,6 @@ class ChildrenView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
         try:
             status_filter = request.GET.get('status')
-
-            if status_filter and status_filter not in Child.Status.values:
-                return JsonResponse({
-                    'success': False,
-                    'message': 'Некорректный статус.'
-                },
-                status=400,
-            )
             children_data = ChildService.get_all_children(status_filter=status_filter)
 
             return JsonResponse({
@@ -24,6 +15,13 @@ class ChildrenView(View):
                 'children': children_data,
                 'count': len(children_data)
             })
+        except ValueError as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            },
+            status=400,
+        )
         except Exception as e:
             return JsonResponse({
                 'success': False,
